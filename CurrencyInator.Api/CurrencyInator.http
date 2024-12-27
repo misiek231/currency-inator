@@ -1,0 +1,6 @@
+@currency_inator_HostAddress = http://localhost:5231
+
+GET {{currency_inator_HostAddress}}/ping/
+Accept: application/json
+
+###
