@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyInator.Core", "Curr
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C39729E0-D247-4247-865F-DA1058BF6480}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyInator.Core.Tests", "CurrencyInator.Core.Tests\CurrencyInator.Core.Tests.csproj", "{A302572D-7FD5-4327-8D31-CDB1736B2BEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C39729E0-D247-4247-865F-DA1058BF6480}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C39729E0-D247-4247-865F-DA1058BF6480}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C39729E0-D247-4247-865F-DA1058BF6480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A302572D-7FD5-4327-8D31-CDB1736B2BEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A302572D-7FD5-4327-8D31-CDB1736B2BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A302572D-7FD5-4327-8D31-CDB1736B2BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A302572D-7FD5-4327-8D31-CDB1736B2BEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
