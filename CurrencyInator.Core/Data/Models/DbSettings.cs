@@ -1,7 +1,12 @@
-﻿namespace CurrencyInator.Core.Data.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CurrencyInator.Core.Data.Models;
 
 public class DbSettings
 {
-    public string ConnectionString { get; set; } = null!;
-    public string DatabaseName { get; set; } = null!;
+    [Required]
+    public required string ConnectionString { get; set; }
+
+    [Required]
+    public required string DatabaseName { get; set; }
 }
