@@ -2,13 +2,10 @@
 using CurrencyInator.Core.Data.Repository;
 using CurrencyInator.Core.Models;
 using CurrencyInator.Core.Services;
-using CurrencyInator.Core.Tests.Integration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Configuration;
 using MongoDB.Driver.Linq;
 using Moq;
-using OneOf.Types;
 
 namespace CurrencyInator.Core.Tests.Integration;
 
