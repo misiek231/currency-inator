@@ -26,7 +26,8 @@ public class CurrenciesServiceTests
         {
             Currency = "USD",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 1.0M
+            SellRate = 1.0M,
+            BuyRate = 1.0M
         };
 
         currenciesHttpServiceMock.Setup(p => p.GetCurrencyRate(It.IsAny<string>(), It.IsAny<DateOnly>(), It.IsAny<CancellationToken>())).Verifiable(Times.Never);
@@ -40,7 +41,8 @@ public class CurrenciesServiceTests
         currenciesHttpServiceMock.Verify();
         currenciesRepositoryMock.Verify();
         Assert.IsType<CurrencyRateResult>(result.Value);
-        Assert.Equal(data.Rate, result.AsT0.Rate);
+        Assert.Equal(data.SellRate, result.AsT0.SellRate);
+        Assert.Equal(data.BuyRate, result.AsT0.BuyRate);
     }
 
     [Fact]
@@ -51,11 +53,12 @@ public class CurrenciesServiceTests
         {
             Currency = "USD",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 1.0M
+            BuyRate = 1.0M,
+            SellRate = 1.0M
         };
 
         currenciesHttpServiceMock.Setup(p => p.GetCurrencyRate("USD", new DateOnly(2024, 12, 12), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(1.0M)
+            .ReturnsAsync(new NbpRate() { Ask = 1.0M, Bid = 1.0M, EffectiveDate = "", No = "" })
             .Verifiable(Times.AtLeastOnce);
 
         currenciesRepositoryMock.Setup(p => p.Find("USD", new DateOnly(2024, 12, 12), It.IsAny<CancellationToken>())).ReturnsAsync(new NotFound());
@@ -71,7 +74,8 @@ public class CurrenciesServiceTests
         currenciesHttpServiceMock.Verify();
         currenciesRepositoryMock.Verify();
         Assert.IsType<CurrencyRateResult>(result.Value);
-        Assert.Equal(data.Rate, result.AsT0.Rate);
+        Assert.Equal(data.SellRate, result.AsT0.SellRate);
+        Assert.Equal(data.BuyRate, result.AsT0.BuyRate);
     }
 
     [Fact]
@@ -82,7 +86,8 @@ public class CurrenciesServiceTests
         {
             Currency = "USD",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 1.0M
+            BuyRate = 1.0M,
+            SellRate = 1.0M
         };
 
         currenciesHttpServiceMock.Setup(p => p.GetCurrencyRate("USD", new DateOnly(2024, 12, 12), It.IsAny<CancellationToken>()))

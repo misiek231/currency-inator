@@ -14,7 +14,7 @@ public class CurrenciesServiceTests : IClassFixture<DbFixture>
     private readonly CurrenciesService sut;
     private readonly Mock<ILogger<CurrenciesRepository>> loggerMock = new();
     private readonly Mock<IHttpClientFactory> clientFactoryMock = new();
-    private readonly string baseAddress = "https://api.nbp.pl/api/exchangerates/rates/A/";
+    private readonly string baseAddress = "https://api.nbp.pl/api/exchangerates/rates/C/";
     private readonly string dbConnectionString;
 
     public CurrenciesServiceTests(DbFixture dbFixture)
@@ -41,7 +41,8 @@ public class CurrenciesServiceTests : IClassFixture<DbFixture>
         {
             Currency = "USD",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 1.0M
+            BuyRate = 1.0M,
+            SellRate = 1.0M
         };
 
         await GetCollection().InsertOneAsync(data);
@@ -51,7 +52,8 @@ public class CurrenciesServiceTests : IClassFixture<DbFixture>
 
         // assert
         Assert.IsType<CurrencyRateResult>(result.Value);
-        Assert.Equal(data.Rate, result.AsT0.Rate);
+        Assert.Equal(data.BuyRate, result.AsT0.BuyRate);
+        Assert.Equal(data.SellRate, result.AsT0.SellRate);
 
         // cleanup
         await GetCollection().DeleteOneAsync(p => p.Currency == "USD");
@@ -65,7 +67,8 @@ public class CurrenciesServiceTests : IClassFixture<DbFixture>
         {
             Currency = "USD",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 1.0M
+            BuyRate = 1.0M,
+            SellRate = 1.0M
         };
 
         // act
@@ -73,12 +76,14 @@ public class CurrenciesServiceTests : IClassFixture<DbFixture>
 
         // assert
         Assert.IsType<CurrencyRateResult>(result.Value);
-        Assert.Equal(4.0740M, result.AsT0.Rate);
+        Assert.Equal(4.02270M, result.AsT0.BuyRate);
+        Assert.Equal(4.1039M, result.AsT0.SellRate);
 
         var dbItems = await GetCollection().AsQueryable().Where(p => p.Currency == "USD" && p.Date == new DateOnly(2024, 12, 12)).ToListAsync();
 
         Assert.Single(dbItems);
-        Assert.Equal(4.0740M, dbItems[0].Rate);
+        Assert.Equal(4.02270M, dbItems[0].BuyRate);
+        Assert.Equal(4.1039M, dbItems[0].SellRate);
 
         // cleanup
         await GetCollection().DeleteOneAsync(p => p.Currency == "USD");

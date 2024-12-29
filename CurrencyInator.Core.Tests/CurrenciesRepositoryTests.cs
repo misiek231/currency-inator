@@ -24,7 +24,8 @@ public class CurrenciesRepositoryTests
             Id = "Test",
             Currency = "USD",
             Date = new DateOnly(2024, 12, 28),
-            Rate = 1
+            SellRate = 1,
+            BuyRate = 1,
         }
     ];
 
@@ -74,7 +75,8 @@ public class CurrenciesRepositoryTests
             Id = "Test",
             Currency = "EUR",
             Date = new DateOnly(2024, 12, 28),
-            Rate = 1
+            SellRate = 1,
+            BuyRate = 1,
         };
 
         collectionMock.Setup(p => p.InsertOneAsync(It.IsAny<CurrencyRate>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>())).Verifiable();

@@ -31,7 +31,8 @@ public class CurrenciesService
         {
             Currency = currency,
             Date = date,
-            Rate = newRate.AsT0
+            BuyRate = newRate.AsT0.Bid,
+            SellRate = newRate.AsT0.Ask
         };
 
         await currenciesRepository.Create(model, ct);

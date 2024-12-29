@@ -22,12 +22,12 @@ public class GetCurrencyRateTests : IClassFixture<ApiFixture>
         {
             Currency = "USD",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 4.0740M
+            BuyRate = 4.0227M,
+            SellRate = 4.1039M
         };
 
         // act
         var result = await _client.GetAsync("USD/2024-12-12");
-
 
         // assert
         var model = await result.Content.ReadFromJsonAsync<CurrencyRateResult>();

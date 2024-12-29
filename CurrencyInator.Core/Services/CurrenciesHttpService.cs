@@ -7,7 +7,7 @@ namespace CurrencyInator.Core.Services;
 
 public interface ICurrenciesHttpService
 {
-    Task<OneOf<decimal, NotFound>> GetCurrencyRate(string currency, DateOnly date, CancellationToken ct);
+    Task<OneOf<NbpRate, NotFound>> GetCurrencyRate(string currency, DateOnly date, CancellationToken ct);
 }
 
 public class CurrenciesHttpService : ICurrenciesHttpService
@@ -20,7 +20,7 @@ public class CurrenciesHttpService : ICurrenciesHttpService
         this.httpClientFactory = httpClientFactory;
     }
 
-    public async Task<OneOf<decimal, NotFound>> GetCurrencyRate(string currency, DateOnly date, CancellationToken ct)
+    public async Task<OneOf<NbpRate, NotFound>> GetCurrencyRate(string currency, DateOnly date, CancellationToken ct)
     {
         var client = httpClientFactory.CreateClient(NBP_CLIENT_NAME);
 
@@ -32,6 +32,6 @@ public class CurrenciesHttpService : ICurrenciesHttpService
 
         if (result == null || result.Rates.Count != 1) return new NotFound();
 
-        return result.Rates[0].Mid;
+        return result.Rates[0];
     }
 }

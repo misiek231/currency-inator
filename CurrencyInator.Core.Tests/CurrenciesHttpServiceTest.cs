@@ -13,7 +13,7 @@ public class CurrenciesHttpServiceTests
     private readonly CurrenciesHttpService sut;
     private readonly Mock<IHttpClientFactory> clientFactoryMock = new();
     private readonly MockHttpMessageHandler httpMessageHandlerMock = new();
-    private readonly string baseAddress = "https://api.nbp.pl/api/exchangerates/rates/A/";
+    private readonly string baseAddress = "https://api.nbp.pl/api/exchangerates/rates/C/";
 
     public CurrenciesHttpServiceTests()
     {
@@ -30,7 +30,7 @@ public class CurrenciesHttpServiceTests
     public async Task GetCurrencyRate_ShouldReturnNbpCurrency_WhenResponseIsSuccess()
     {
         // arrange
-        var requestResult = new NbpCurrencyRate() { Currency = "USD", Code = "USD", Rates = [new() { Mid = 1.0M, EffectiveDate = "", No = "" }], Table = "A" };
+        var requestResult = new NbpCurrencyRate() { Currency = "USD", Code = "USD", Rates = [new() { Ask = 1.0M, Bid = 1.0M, EffectiveDate = "", No = "" }], Table = "A" };
 
         httpMessageHandlerMock.When(HttpMethod.Get, $"{baseAddress}USD/2024-12-12")
             .Respond(HttpStatusCode.OK, JsonContent.Create(requestResult));
@@ -40,8 +40,9 @@ public class CurrenciesHttpServiceTests
 
         // assert
         httpMessageHandlerMock.VerifyNoOutstandingRequest();
-        Assert.IsType<decimal>(result.Value);
-        Assert.Equal(1.0M, result.Value);
+        Assert.IsType<NbpRate>(result.Value);
+        Assert.Equal(1.0M, result.AsT0.Bid);
+        Assert.Equal(1.0M, result.AsT0.Ask);
     }
 
     [Fact]

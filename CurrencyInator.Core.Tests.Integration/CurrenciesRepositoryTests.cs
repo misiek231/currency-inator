@@ -30,7 +30,8 @@ public class CurrenciesRepositoryTests : IClassFixture<DbFixture>
         {
             Currency = "PLN",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 1.0M,
+            BuyRate = 1.0M,
+            SellRate = 1.0M,
         };
 
         // act
@@ -40,7 +41,7 @@ public class CurrenciesRepositoryTests : IClassFixture<DbFixture>
         var collection = GetCollection();
         Assert.NotNull(collection);
 
-        var items = await collection.AsQueryable().Where(p => p.Currency == model.Currency && p.Date == model.Date && p.Rate == model.Rate).ToListAsync();
+        var items = await collection.AsQueryable().Where(p => p.Currency == model.Currency && p.Date == model.Date && p.BuyRate == model.BuyRate && p.SellRate == model.SellRate).ToListAsync();
 
         Assert.Single(items);
         Assert.IsType<Success<CurrencyRate>>(result.Value);
@@ -57,7 +58,8 @@ public class CurrenciesRepositoryTests : IClassFixture<DbFixture>
         {
             Currency = "PLN",
             Date = new DateOnly(2024, 12, 12),
-            Rate = 1.0M,
+            BuyRate = 1.0M,
+            SellRate = 1.0M,
         };
 
         await GetCollection().InsertOneAsync(model);
@@ -69,7 +71,7 @@ public class CurrenciesRepositoryTests : IClassFixture<DbFixture>
         var collection = GetCollection();
         Assert.NotNull(collection);
 
-        var items = await collection.AsQueryable().Where(p => p.Currency == model.Currency && p.Date == model.Date && p.Rate == model.Rate).ToListAsync();
+        var items = await collection.AsQueryable().Where(p => p.Currency == model.Currency && p.Date == model.Date && p.BuyRate == model.BuyRate && p.SellRate == model.SellRate).ToListAsync();
         Assert.Single(items);
 
         Assert.IsType<CurrencyRate>(result.Value);

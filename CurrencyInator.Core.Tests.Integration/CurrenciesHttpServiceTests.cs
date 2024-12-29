@@ -1,4 +1,5 @@
-﻿using CurrencyInator.Core.Services;
+﻿using CurrencyInator.Core.Models;
+using CurrencyInator.Core.Services;
 using Moq;
 using OneOf.Types;
 
@@ -8,7 +9,7 @@ public class CurrenciesHttpServiceTests
 {
     private readonly CurrenciesHttpService sut;
     private readonly Mock<IHttpClientFactory> clientFactoryMock = new();
-    private readonly string baseAddress = "https://api.nbp.pl/api/exchangerates/rates/A/";
+    private readonly string baseAddress = "https://api.nbp.pl/api/exchangerates/rates/C/";
 
     public CurrenciesHttpServiceTests()
     {
@@ -28,8 +29,9 @@ public class CurrenciesHttpServiceTests
         var result = await sut.GetCurrencyRate("USD", new DateOnly(2024, 12, 12), CancellationToken.None);
 
         // assert
-        Assert.IsType<decimal>(result.Value);
-        Assert.Equal(4.0740M, result.Value);
+        Assert.IsType<NbpRate>(result.Value);
+        Assert.Equal(4.02270M, result.AsT0.Bid);
+        Assert.Equal(4.1039M, result.AsT0.Ask);
     }
 
     [Fact]

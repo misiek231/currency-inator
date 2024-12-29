@@ -6,12 +6,14 @@ public class CurrencyRateResult
 {
     public required string Currency { get; set; }
     public required DateOnly Date { get; set; }
-    public required decimal Rate { get; set; }
+    public required decimal BuyRate { get; set; }
+    public required decimal SellRate { get; set; }
 
     public static CurrencyRateResult From(CurrencyRate model) => new()
     {
         Currency = model.Currency,
         Date = model.Date,
-        Rate = model.Rate,
+        BuyRate = model.BuyRate,
+        SellRate = model.SellRate,
     };
 }

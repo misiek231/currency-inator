@@ -10,5 +10,6 @@ public class CurrencyRate
     public string? Id { get; set; }
     public string Currency { get; set; } = null!;
     public DateOnly Date { get; set; }
-    public decimal Rate { get; set; }
+    public decimal BuyRate { get; set; }
+    public decimal SellRate { get; set; }
 }

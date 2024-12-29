@@ -12,7 +12,8 @@ public class NbpRate
 {
     public required string No { get; set; }
     public required string EffectiveDate { get; set; }
-    public required decimal Mid { get; set; }
+    public required decimal Bid { get; set; }
+    public required decimal Ask { get; set; }
 }
 
 
