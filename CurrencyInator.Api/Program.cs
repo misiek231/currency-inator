@@ -1,24 +1,31 @@
-using CurrencyInator.Api;
 using CurrencyInator.Core.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace CurrencyInator.Api;
 
-builder.Services.AddProblemDetails();
-
-builder.Services.AddAppOptions(builder.Configuration);
-builder.Services.AddNpbApiClient();
-builder.Services.AddServices();
-
-var app = builder.Build();
-
-app.UseHttpsRedirection();
-app.UseExceptionHandler();
-
-app.MapGet("/ping", () => "pong");
-
-app.MapGet("/{currency}/{date}", async (CurrenciesService s, string currency, DateOnly date, CancellationToken ct) =>
+public class Program
 {
-    return (await s.GetOrCreateCurrencyRate(currency, date, ct)).Match(p => Results.Ok(p), p => Results.NotFound("Requested currency does not have rate for given date"));
-});
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-app.Run();
+        builder.Services.AddProblemDetails();
+
+        builder.Services.AddAppOptions(builder.Configuration);
+        builder.Services.AddNpbApiClient();
+        builder.Services.AddServices();
+
+        var app = builder.Build();
+
+        app.UseHttpsRedirection();
+        app.UseExceptionHandler();
+
+        app.MapGet("/ping", () => "pong");
+
+        app.MapGet("/{currency}/{date}", async (CurrenciesService s, string currency, DateOnly date, CancellationToken ct) =>
+        {
+            return (await s.GetOrCreateCurrencyRate(currency, date, ct)).Match(p => Results.Ok(p), p => Results.NotFound("Requested currency does not have rate for given date"));
+        });
+
+        app.Run();
+    }
+}
