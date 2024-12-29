@@ -20,7 +20,7 @@ public class MongoDbContext : IMongoDbContext
         db = client.GetDatabase(dbSettings.Value.DatabaseName);
     }
 
-    public IMongoCollection<T> WritableCollection<T>() => db.GetCollection<T>(nameof(T));
+    public IMongoCollection<T> WritableCollection<T>() => db.GetCollection<T>(typeof(T).Name);
 
     public IQueryable<T> ReadableCollection<T>() => WritableCollection<T>().AsQueryable();
 }

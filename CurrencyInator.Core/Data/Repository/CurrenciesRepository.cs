@@ -7,7 +7,13 @@ using OneOf.Types;
 
 namespace CurrencyInator.Core.Data.Repository;
 
-public class CurrenciesRepository
+public interface ICurrenciesRepository
+{
+    Task<OneOf<Success<CurrencyRate>, CurrencyRate, Error>> Create(CurrencyRate model, CancellationToken ct);
+    Task<OneOf<CurrencyRate, NotFound>> Find(string currency, DateOnly date, CancellationToken ct);
+}
+
+public class CurrenciesRepository : ICurrenciesRepository
 {
     private readonly IMongoDbContext db;
     private readonly ILogger<CurrenciesRepository> logger;

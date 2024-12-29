@@ -33,7 +33,7 @@ public class CurrenciesHttpServiceTests
         var requestResult = new NbpCurrencyRate() { Currency = "USD", Code = "USD", Rates = [new() { Mid = 1.0M, EffectiveDate = "", No = "" }], Table = "A" };
 
         httpMessageHandlerMock.When(HttpMethod.Get, $"{baseAddress}USD/2024-12-12")
-            .Respond(HttpStatusCode.NotModified, JsonContent.Create(requestResult));
+            .Respond(HttpStatusCode.OK, JsonContent.Create(requestResult));
 
         // act
         var result = await sut.GetCurrencyRate("USD", new DateOnly(2024, 12, 12), CancellationToken.None);

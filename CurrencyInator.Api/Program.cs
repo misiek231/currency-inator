@@ -1,29 +1,24 @@
 using CurrencyInator.Api;
-using CurrencyInator.Api.Settings;
-using CurrencyInator.Core.Data;
-using CurrencyInator.Core.Data.Models;
-using CurrencyInator.Core.Data.Repository;
+using CurrencyInator.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOptions<DbSettings>()
-    .Bind(builder.Configuration.GetSection("Database"))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+builder.Services.AddProblemDetails();
 
-builder.Services.AddOptions<NbpApiSettings>()
-  .Bind(builder.Configuration.GetSection("NbpApi"))
-  .ValidateDataAnnotations()
-  .ValidateOnStart();
-
-builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
-builder.Services.AddSingleton<CurrenciesRepository>();
-builder.Services.RegisterNpbApiClient();
+builder.Services.AddAppOptions(builder.Configuration);
+builder.Services.AddNpbApiClient();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UseExceptionHandler();
 
 app.MapGet("/ping", () => "pong");
+
+app.MapGet("/{currency}/{date}", async (CurrenciesService s, string currency, DateOnly date, CancellationToken ct) =>
+{
+    return (await s.GetOrCreateCurrencyRate(currency, date, ct)).Match(p => Results.Ok(p), p => Results.NotFound("Requested currency does not have rate for given date"));
+});
 
 app.Run();

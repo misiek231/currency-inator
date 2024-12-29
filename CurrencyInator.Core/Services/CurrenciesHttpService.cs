@@ -1,12 +1,16 @@
 ﻿using CurrencyInator.Core.Models;
 using OneOf;
 using OneOf.Types;
-using System.Net;
 using System.Net.Http.Json;
 
 namespace CurrencyInator.Core.Services;
 
-public class CurrenciesHttpService
+public interface ICurrenciesHttpService
+{
+    Task<OneOf<decimal, NotFound>> GetCurrencyRate(string currency, DateOnly date, CancellationToken ct);
+}
+
+public class CurrenciesHttpService : ICurrenciesHttpService
 {
     private readonly IHttpClientFactory httpClientFactory;
     public const string NBP_CLIENT_NAME = "NPB";
@@ -22,7 +26,7 @@ public class CurrenciesHttpService
 
         var response = await client.GetAsync($"{currency}/{date:yyyy-MM-dd}", ct);
 
-        if (response.StatusCode != HttpStatusCode.NotModified) return new NotFound();
+        if (!response.IsSuccessStatusCode) return new NotFound();
 
         var result = await response.Content.ReadFromJsonAsync<NbpCurrencyRate>(ct);
 
