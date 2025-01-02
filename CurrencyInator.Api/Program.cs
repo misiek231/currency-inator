@@ -1,4 +1,6 @@
 using CurrencyInator.Core.Services;
+using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 
 namespace CurrencyInator.Api;
 
@@ -13,11 +15,32 @@ public class Program
         builder.Services.AddAppOptions(builder.Configuration);
         builder.Services.AddNpbApiClient();
         builder.Services.AddServices();
+        builder.Services.AddOpenApi();
 
         var app = builder.Build();
 
+        app.MapOpenApi();
+        app.MapScalarApiReference(p =>
+        {
+            p.WithTitle("Currency-Inator API")
+            .WithTheme(ScalarTheme.BluePlanet)
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+
+            p.Servers = Array.Empty<ScalarServer>();
+        });
+
         app.UseHttpsRedirection();
-        app.UseExceptionHandler();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler();
+        }
+
+        app.MapGet("/", () => Results.Redirect("scalar/v1")).ExcludeFromDescription();
 
         app.MapGet("/ping", () => "pong");
 
