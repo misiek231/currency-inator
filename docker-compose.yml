@@ -1,6 +1,8 @@
 services:
   currencyinator.api:
     image: ${DOCKER_REGISTRY-}currencyinatorapi
+    ports:
+      - 5231:8080
     build:
       context: .
       dockerfile: CurrencyInator.Api/Dockerfile

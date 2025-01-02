@@ -28,8 +28,6 @@ public class Program
             p.Servers = Array.Empty<ScalarServer>();
         });
 
-        app.UseHttpsRedirection();
-
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
