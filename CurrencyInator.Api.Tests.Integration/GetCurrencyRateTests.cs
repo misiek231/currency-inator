@@ -45,4 +45,16 @@ public class GetCurrencyRateTests : IClassFixture<ApiFixture>
         // assert
         Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
     }
+
+    [Fact]
+    public async Task GetCurrencyRateEndpoint_ShouldReturnValidationError_WhenDateHasInvalidFormat()
+    {
+        // act
+        var result = await _client.GetAsync("USD/2023-54-35");
+
+        // assert
+        var stringContent = await result.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        Assert.Contains("Invalid date format", stringContent);
+    }
 }

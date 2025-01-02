@@ -21,9 +21,14 @@ public class Program
 
         app.MapGet("/ping", () => "pong");
 
-        app.MapGet("/{currency}/{date}", async (CurrenciesService s, string currency, DateOnly date, CancellationToken ct) =>
+        app.MapGet("/{currency}/{date}", async (CurrenciesService s, string currency, string date, CancellationToken ct) =>
         {
-            return (await s.GetOrCreateCurrencyRate(currency, date, ct)).Match(p => Results.Ok(p), p => Results.NotFound("Requested currency does not have rate for given date"));
+            if (!DateOnly.TryParse(date, out var parsedDate))
+            {
+                return Results.BadRequest(new { error = "Invalid date format. Provide date in format: yyyy-MM-dd" });
+            }
+
+            return (await s.GetOrCreateCurrencyRate(currency, parsedDate, ct)).Match(p => Results.Ok(p), p => Results.NotFound(new { error = "Requested currency does not have rate for given date" }));
         });
 
         app.Run();
