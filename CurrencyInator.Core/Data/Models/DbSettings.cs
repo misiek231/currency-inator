@@ -5,6 +5,9 @@ namespace CurrencyInator.Core.Data.Models;
 public class DbSettings
 {
     [Required]
+    public required bool Enabled { get; set; }
+
+    [Required]
     public required string ConnectionString { get; set; }
 
     [Required]

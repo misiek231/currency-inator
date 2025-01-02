@@ -27,6 +27,8 @@ public class CurrenciesRepository : ICurrenciesRepository
 
     public async Task<OneOf<CurrencyRate, NotFound>> Find(string currency, DateOnly date, CancellationToken ct)
     {
+        if (!db.Enabled) return new NotFound();
+
         var r = db.ReadableCollection<CurrencyRate>()
             .Where(p => p.Currency == currency)
             .Where(p => p.Date == date);
@@ -40,6 +42,8 @@ public class CurrenciesRepository : ICurrenciesRepository
 
     public async Task<OneOf<Success<CurrencyRate>, CurrencyRate, Error>> Create(CurrencyRate model, CancellationToken ct)
     {
+        if (!db.Enabled) return model;
+
         await createLock.WaitAsync(cancellationToken: ct);
 
         try

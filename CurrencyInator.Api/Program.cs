@@ -1,5 +1,4 @@
 using CurrencyInator.Core.Services;
-using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 
 namespace CurrencyInator.Api;

@@ -1,7 +1,6 @@
 ﻿using CurrencyInator.Core.Data;
 using CurrencyInator.Core.Data.Models;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver.Core.Configuration;
 using Moq;
 using Testcontainers.MongoDb;
 
@@ -21,7 +20,7 @@ public class DbFixture : IAsyncLifetime
 
         DbConnectionString = _container.GetConnectionString();
 
-        dbSettingsMock.SetupGet(p => p.Value).Returns(new DbSettings { ConnectionString = DbConnectionString, DatabaseName = "Test" });
+        dbSettingsMock.SetupGet(p => p.Value).Returns(new DbSettings { ConnectionString = DbConnectionString, DatabaseName = "Test", Enabled = true });
 
         Context = new MongoDbContext(dbSettingsMock.Object);
     }

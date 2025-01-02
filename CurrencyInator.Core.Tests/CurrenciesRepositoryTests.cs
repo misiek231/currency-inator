@@ -33,6 +33,7 @@ public class CurrenciesRepositoryTests
     {
         dbContextMock.Setup(p => p.WritableCollection<CurrencyRate>()).Returns(collectionMock.Object);
         dbContextMock.Setup(p => p.ReadableCollection<CurrencyRate>()).Returns(new MongoQueryMock<CurrencyRate>(data));
+        dbContextMock.SetupGet(p => p.Enabled).Returns(true);
 
         sut = new CurrenciesRepository(dbContextMock.Object, loggerMock.Object);
     }
@@ -64,6 +65,31 @@ public class CurrenciesRepositoryTests
 
         // assert
         Assert.IsType<NotFound>(result.Value);
+    }
+
+    [Fact]
+    public async Task Create_ShouldReturnPassedModel_WhenDbIsNotEnabled()
+    {
+        // arrange
+        dbContextMock.SetupGet(p => p.Enabled).Returns(false);
+
+        var doc = new CurrencyRate()
+        {
+            Id = "Test",
+            Currency = "EUR",
+            Date = new DateOnly(2024, 12, 28),
+            SellRate = 1,
+            BuyRate = 1,
+        };
+
+        collectionMock.Setup(p => p.InsertOneAsync(It.IsAny<CurrencyRate>(), It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>())).Verifiable(Times.Never);
+
+        // act
+        var result = await sut.Create(doc, CancellationToken.None);
+
+        // assert
+        collectionMock.Verify();
+        Assert.IsType<CurrencyRate>(result.Value);
     }
 
     [Fact]

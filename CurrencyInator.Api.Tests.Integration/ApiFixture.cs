@@ -23,6 +23,7 @@ public class ApiFixture : WebApplicationFactory<Program>, IAsyncLifetime
             services.RemoveAll<IOptions<DbSettings>>();
             services.AddOptions<DbSettings>().Configure(p =>
             {
+                p.Enabled = true;
                 p.ConnectionString = DbConnectionString;
                 p.DatabaseName = "Test";
             });
